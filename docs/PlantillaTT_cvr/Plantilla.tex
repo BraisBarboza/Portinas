@@ -1,0 +1,201 @@
+\documentclass[a4paper,openright,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} 
+\usepackage{subfigure}
+\usepackage[mathscr]{eucal}
+\usepackage{titling}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{afterpage}
+\usepackage{vmargin}
+\usepackage[spanish]{babel}
+\usepackage{eurosym} 
+\usepackage{multirow} 
+\usepackage{cite}
+\usepackage{url}
+
+\setpapersize{A4}	   %  DIN A4
+\setmargins{3cm}    % margen izquierdo
+{3.5cm}                     % margen superior
+{15cm}                       % anchura del texto
+{22.5cm}                   % altura del texto
+{10pt}                         % altura de los encabezados
+{1cm}                         % espacio entre el texto y los encabezados
+{0pt}                           % altura del pie de página
+{2cm}                         % espacio entre el texto y el pie de página
+
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+\vspace*{-1in}
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=8cm]{udc.eps}
+\end{center}
+\end{figure}
+
+\vspace*{1in}
+PROGRAMACIÓN DE SISTEMA 21/22 Q1\\
+\begin{center}
+\includegraphics[width=3cm,height=3cm]{ejemplo.jpg}
+\end{center}
+\vspace*{10mm}
+\begin{Large}
+\textbf{Desarrollo de una aplicación de control de aforo en Android} \\
+\end{Large}
+\vspace*{10mm}
+\begin{Large}
+\textbf{Portiñas} \\
+\end{Large}
+
+\vspace*{3in}
+\begin{large}
+\raggedleft
+\textbf{Autores:} Brais Barboza Ordoñez\\
+Julián Barcia Facal (julian.bfacal@udc.es) \\
+Jose \\
+\textbf{Fecha:}\textit{A Coruña, 6 Octubre 2021}\\
+\textbf{Version:}\textit{1.0}\\
+
+\end{large}
+
+\end{center}
+\end{titlepage} 
+
+\newpage
+
+\addtocontents{toc}{\hspace{-7.5mm} \textbf{Capítulos}}
+\addtocontents{toc}{\hfill \textbf{Página} \par}
+\addtocontents{toc}{\vspace{-2mm} \hspace{-7.5mm} \hrule \par}
+
+\pagenumbering{empty}
+
+\tableofcontents
+
+\vspace{3cm}
+
+\begin{flushright}
+\begin{table}[hbtp]
+\begin{center}
+
+\caption{Tabla de versiones.}
+\label{tabla:versiones}
+\small
+\vspace{1ex}
+
+\begin{tabular}{|c|c|l|}
+\hline
+Versión & Fecha & Autor \\
+\hline \hline
+1.0 & 06/10/2021 & Julian y Brais\\ \hline
+
+\end{tabular}
+
+\end{center}
+\end{table}
+\end{flushright}
+
+
+\newpage
+\pagenumbering{arabic}
+
+
+%%%%%%%
+%%%%%%%
+\section{Introducción}\label{cap.introduccion}
+
+%%
+\subsection{Objetivos}
+El objetivo principal de este trabajo es gestionar el control de acceso de un edificio o recinto genérico, de tal modo que se tenga un control del número de personas que entran y salen del recinto. Además, buscaremos también crear un lector de identificación, de tal modo que cada usuario pueda ser reconocido de forma individual e inequívoca. De esta manera mediante un teléfono, a través de la app, podremos agilizar los trámites de aforo y acreditación.
+%%
+\subsection{Motivación}
+Debido a la situación de pandemia en la que nos encontramos el control de aforo se ha vuelto un requisito indispensable en muchas ocasiones para poder cumplir las legislaciones continuamente cambiantes. Esta aplicación busca servir, de una manera simplificada, como ayuda para cubrir estas nuevas necesidades que la pandemia ha generado consigo.
+
+%%
+\subsection{Trabajo relacionado}
+Existe un trabajo fin de grado similar \cite{Safe-Events} que busca proporcionar una aplicación de control de aforo parecida a la nuestra. Sus primeros pasos son fácilmente extrapolables para nuestro cometido y por lo tanto, nos servirá de referencia durante el trabajo.
+
+
+
+
+%%%%%%%
+%%%%%%%
+\section{Análisis de requisitos}
+Esencialmente la aplicación controlará el acceso del personal de un edificio. Con una estación de control en cada acceso, el personal de forma casi transparente podrá acceder al edificio o marcharse del mismo.
+El personal contara con un dispositivo con la tecnología NFC (mismamente su teléfono) el cual a la hora de entrar al edificio escanearan contra la aplicación de la puerta, que les garantizara el acceso en caso de cumplir los requisitos necesarios.
+%%
+\subsection{Funcionalidades}
+\begin{itemize}
+    \item Garantizar o denegar el acceso al edificio
+    \item Controlar el horario de entrada y salida del personal
+    \item Conteo del aforo en un determinado momento
+\end{itemize}
+
+%%
+\subsection{Prioridades}
+Nuestra mayor prioridad sería la parte del conteo de personal en un determinado momento, que ya aportaría valor en sí a un establecimiento.
+Posteriormente implementaríamos la capacidad de permitir o no el acceso basado en horarios o aforo del edificio.
+En caso de que pudiéramos implementar funcionalidades accesorias, implementaríamos la capacidad de llevar un registro del aforo para poder controlar quien ha entrado  o salido del edificio un determinado día. Por otra parte estaría el añadir además de la tecnología NFC una alternativa un más transparente para facilitar el uso por parte de personas de accesibilidad reducida.
+%%%%%%%
+%%%%%%%
+\section{Planificación inicial}
+
+%%
+\subsection{Iteraciones}
+\begin{enumerate}
+    \item Generar una aplicación que muestre el aforo en el momento actual y incremente o decremente de manera manual, según las personas salgan o entren.
+    \item Conseguir que este recuento se haga de manera automática al detectar la entrada y salida de usuarios.
+    \item Utilizar NFC \cite{NFC} para ser capaces de identificar a cada persona que entre de manera individual.
+    \item Una vez identificadas estas personas, ser capaces de comprobar con la información que tenemos si pueden acceder o no.
+    
+\end{enumerate}
+
+%%
+\subsection{Responsabilidades}
+Considerando que las responsabilidades del proyecto aumentaran de forma exponencial semana a semana, en un primer momento Brais se encargará de actualizar la documentación del proyecto y Julian se encargará de crear el proyecto inicial.
+
+%%
+\subsection{Hitos}
+El desarrollo del proyecto se va a organizar en \textit{sprints} o secciones, ya que este esquema es el que más se adapta a la idea inicial que tenemos del proyecto.
+
+\begin{itemize}
+\item{Fase de planificación: Esta fase se centrará en crear una primera versión del proyecto, diseñando de manera esquemática funcionalidades e interfaz que serán utilizadas próximamente. En esta sección se incluye también la creación de este documento, que será modificado a lo largo del proyecto}
+\item{Fase de desarrollo de la aplicación: Esta fase centra el foco en integrar las funcionalidades y el diseño de la anterior iteración en la app móvil. Al final de esta etapa, se podría un realizar un test para comprobar el correcto funcionamiento de las funciones principales de la aplicación. El test se hará de manera manual, sobre un dispositivo físico, para evitar errores que puede ocultar el emulador.}
+\item{Integración del sistema de lectura: Esta sección se focalizará en integrar el método de NFC en las funcionalidades de la aplicación. Al finalizar esta tarea se podría realizar un test para comprobar la correcta lectura y reconocimiento de los dispositivos.}
+\item{Posibles nuevas funcionalidades y cierre del proyecto: Esta última sección se centrará en añadir nuevas tareas, pero de pequeño tamaño que no pueden comprometer el cierre final del proyecto. Esta última tarea viene acompañada de pruebas sobre el funcionamiento completo de la aplicación.}
+\end{itemize}
+
+%%
+\subsection{Incidencias}
+El desarrollo inicial de la aplicación manual no debería suponer un contratiempo, ya que con lo que se ha visto hasta el momento la tarea se vuelve relativamente sencilla. Sin embargo, la segunda iteración puede suponer mayor conflicto porque se debe comprobar que se puede hacer uso del sistema NFC y que los dispositivos utilizados cuenten con el servicio.
+
+
+%%%%%%%
+%%%%%%%
+\section{Diseño}
+\subsection{Arquitectura}
+Aprovechándonos de la orientación a eventos de Android, implementaremos un modelo vista presentador, donde un evento en el presentador, modificara la vista y llamara al modelo.
+%%
+\subsection{Persistencia}
+Guardar en local el estado actual del aforo
+Guardar en local el histórico de los accesos
+\subsection{Vista}
+Nuestro objetivo es la transparencia para el usuario, así que intentaremos mantener una vista simple con pocas opciones, de forma que cometer errores sea mas complicado.
+\subsection{Comunicaciones}
+Entre los dispositivos de acceso y un servidor en la nube como puede ser Firebase.
+\subsection{Sensores}
+NFC
+\subsection{Trabajo en background}
+%%%%%%%
+%%%%%%%
+%%\include{latex_tutorial}
+
+
+
+\bibliographystyle{pfc-fic}
+\bibliography{biblio}
+\addcontentsline{toc}{section}{Bibliografía}
+
+\end{document}
