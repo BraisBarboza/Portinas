@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Portinas</string>
+    <string name="aforo_str">Introduzca el aforo</string>
+    <string name="edit_text_ph">p. ej. 250000</string>
+    <string name="continue_but">Continuar</string>
+    <string name="texto_vacio_str">Texto Vacio</string>
+
+
+
 </resources>
