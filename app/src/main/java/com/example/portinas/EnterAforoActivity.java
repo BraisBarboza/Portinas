@@ -29,12 +29,13 @@ public class EnterAforoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enteraforo);
         ButterKnife.bind(this);
     }
+
     @OnClick(R.id.square_bt)
-    public void submit(){
+    public void submit() {
         String aforonum = aforoedtxt.getText().toString();
         if (!aforonum.isEmpty()) {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            intent.putExtra(KEY_TEXT,aforonum);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra(KEY_TEXT, aforonum);
             startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), getString(R.string.texto_vacio_str), Toast.LENGTH_SHORT).show();

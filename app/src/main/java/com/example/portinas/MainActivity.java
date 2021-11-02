@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setMax(aforo_total);
 
         }
-         toggle =  new ActionBarDrawerToggle(this,drawer,toolbar,
-                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         toggle.syncState();
@@ -62,30 +62,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
 
     }
+
     @OnClick(R.id.button_increase)
-    public void submitButtonIncrease(){
-        if (progr_num < aforo_total){
+    public void submitButtonIncrease() {
+        if (progr_num < aforo_total) {
             progr_num += 1;
             updateProgressBar();
         }
     }
 
     @OnClick(R.id.button_decrease)
-    public void submitButtonDecrease(){
-        if (progr_num > 0){
+    public void submitButtonDecrease() {
+        if (progr_num > 0) {
             progr_num -= 1;
             updateProgressBar();
         }
     }
 
-    private void updateProgressBar(){
+    private void updateProgressBar() {
         progressBar.setProgress(progr_num);
         progress_tv.setText(progr_num + "/" + aforo_total);
     }

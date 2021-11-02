@@ -11,8 +11,8 @@
         android:theme="@style/Theme.Portinas">
         <activity
             android:name=".EnterAforoActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
