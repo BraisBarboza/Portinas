@@ -14,7 +14,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Portinas.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.Portinas">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBar">
+        <item name= "android:indeterminateOnly">false</item>
+        <item name= "android:progressDrawable">@drawable/circleprogress</item>
     </style>
 </resources>
