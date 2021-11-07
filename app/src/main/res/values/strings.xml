@@ -1,14 +1,21 @@
 <resources>
     <string name="app_name">Portinas</string>
-    <string name="aforo_str">Introduzca el aforo</string>
+    <string name="aforoinsert_str">Introduzca el aforo</string>
+    <string name="aforo_str">Aforo</string>
     <string name="edit_text_ph">p. ej. 250000</string>
     <string name="continue_but">Continuar</string>
     <string name="texto_vacio_str">Texto Vacio</string>
     <string name="nav_nfc">NFC</string>
     <string name="nav_config">Configuración</string>
+    <string name="nav_share">Compartir</string>
+    <string name="nav_connect">Conectar</string>
+    <string name="nav_bluetooth">Bluetooth</string>
+    <string name="nav_code">Conectar con codigo</string>
     <string name="nav_info">Sobre Nosotros</string>
     <string name="navigation_drawer_open">Abrir menu lateral</string>
     <string name="navigation_drawer_close">Cerrar menu lateral</string>
+    <string name="browse_str">Buscar con:</string>
+    <string name="share_text">Comparte la aplicacion: https://github.com/BraisBarboza/Portinas</string>
 
 
 </resources>

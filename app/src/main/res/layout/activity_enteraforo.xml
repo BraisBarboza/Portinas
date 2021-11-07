@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="@string/aforo_str"
+            android:text="@string/aforoinsert_str"
             android:textSize="25dp"
             android:textStyle="bold" />
 
