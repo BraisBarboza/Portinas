@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_aforo);
-        if (savedInstanceState != null) {
+        /*if (savedInstanceState != null) {
             //Restore the fragment's instance
             mMyFragment = (AforoFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
 
-        }
+        }*/
     }
 
 
@@ -85,35 +85,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-/*
-    @OnClick(R.id.button_increase)
-    public void submitButtonIncrease() {
-        if (progr_num < aforo_total) {
-            progr_num += 1;
-            updateProgressBar();
-        }
-    }
 
-    @OnClick(R.id.button_decrease)
-    public void submitButtonDecrease() {
-        if (progr_num > 0) {
-            progr_num -= 1;
-            updateProgressBar();
-        }
-    }
 
-    private void updateProgressBar() {
-        progressBar.setProgress(progr_num);
-        progress_tv.setText(progr_num + "/" + aforo_total);
-    }
-
- */
-
-    @Override
+    /*@Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, "myFragmentName", mMyFragment);
-    }
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
