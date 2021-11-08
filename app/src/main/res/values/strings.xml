@@ -15,6 +15,7 @@
     <string name="navigation_drawer_open">Abrir menu lateral</string>
     <string name="navigation_drawer_close">Cerrar menu lateral</string>
     <string name="browse_str">Buscar con:</string>
+    <string name="subtitle_str">Una aplicación de control de aforo</string>
     <string name="share_text">Comparte la aplicacion: https://github.com/BraisBarboza/Portinas</string>
 
 
