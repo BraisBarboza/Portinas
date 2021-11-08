@@ -4,41 +4,30 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ActionBarContextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.MessageFormat;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnItemSelected;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface {
-
+    String AFORO_FRAGMENT_KEY="AFORO_FRAGMENT_KEY";
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private int final_value = 0;
-    private AforoFragment mMyFragment;
+    private Fragment aforo_fragment;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -55,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, new AforoFragment());
+        fragmentTransaction.add(R.id.fragment_container, new AforoFragment(),AFORO_FRAGMENT_KEY);
         fragmentTransaction.commit();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -68,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         toggle.syncState();
         navigationView.setCheckedItem(R.id.nav_aforo);
-        /*if (savedInstanceState != null) {
-            //Restore the fragment's instance
-            mMyFragment = (AforoFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+        if (savedInstanceState != null) {
+            aforo_fragment = getSupportFragmentManager().getFragment(savedInstanceState, AFORO_FRAGMENT_KEY);
+        }
 
-        }*/
+
     }
 
 
@@ -87,29 +76,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    /*@Override
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "myFragmentName", mMyFragment);
-    }*/
+        getSupportFragmentManager().putFragment(outState, AFORO_FRAGMENT_KEY, aforo_fragment);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        aforo_fragment=getSupportFragmentManager().findFragmentByTag(AFORO_FRAGMENT_KEY);
         switch (item.getItemId()) {
             case R.id.nav_aforo:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new AforoFragment()).commitNow();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aforo_fragment).commitNow();
                 break;
             case R.id.nav_code:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                         new CodeFragment()).commitNow();
                 break;
             case R.id.nav_bluetooth:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                         new BluetoothFragment()).commit();
                 break;
             case R.id.nav_nfc:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                         new NFCFragment()).commit();
                 break;
             case R.id.nav_giticon:
@@ -122,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_compartir:
                 Intent intentSend = new Intent(Intent.ACTION_SEND);
                 intentSend.setType("text/plain");
-                intentSend.putExtra( Intent.EXTRA_TEXT,getString(R.string.share_text));
+                intentSend.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                 startActivity(intentSend);
                 break;
         }
@@ -143,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num > 0) {
             progr_num -= 1;
         }
-        return  progr_num;
+        return progr_num;
     }
 
     @Override

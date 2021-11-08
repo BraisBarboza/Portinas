@@ -15,13 +15,22 @@ import androidx.fragment.app.Fragment;
 
 public class AforoFragment extends Fragment {
     private onFragmentInterface listener;
-
+    String AFORO_KEY= "AFORO";
     private int currentvalue;
     private TextView progress_tv;
     private int  aforo_total = 0;
     private Button  but_increment, but_decrement;
     private ProgressBar progressBar;
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            currentvalue=savedInstanceState.getInt(AFORO_KEY,0);
+            onUpdateProgressBar(currentvalue);
+
+        }
+    }
 
     public interface onFragmentInterface{
         public int onButtonIncrease(int progr_num, int aforo_total);
@@ -36,16 +45,17 @@ public class AforoFragment extends Fragment {
             //Restore the fragment's state here
             currentvalue = 0;
         } else {
-            currentvalue =  savedInstanceState.getInt("aforo",0);
+            currentvalue =  savedInstanceState.getInt("aforo",7);
             onUpdateProgressBar(currentvalue);
-
         }
     }
+
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("aforo",currentvalue);
+        outState.putInt(AFORO_KEY,currentvalue);
     }
 
     @Nullable
