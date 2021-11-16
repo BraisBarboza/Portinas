@@ -55,9 +55,8 @@ PROGRAMACIÓN DE SISTEMA 21/22 Q1\\
 \raggedleft
 \textbf{Autores:} Brais Barboza Ordoñez\\
 Julián Barcia Facal (julian.bfacal@udc.es) \\
-Jose \\
-\textbf{Fecha:}\textit{A Coruña, 6 Octubre 2021}\\
-\textbf{Version:}\textit{1.0}\\
+\textbf{Fecha:}\textit{A Coruña, 9 de noviembre de 2021}\\
+\textbf{Versión:}\textit{2.0}\\
 
 \end{large}
 
@@ -86,24 +85,19 @@ Jose \\
 \vspace{1ex}
 
 \begin{tabular}{|c|c|l|}
-\hline
-Versión & Fecha & Autor \\
-\hline \hline
-1.0 & 06/10/2021 & Julian y Brais\\ \hline
-
+    \hline
+    Versión & Fecha & Autor \\
+    \hline \hline
+    1.0 & 06/10/2021 & Julián y Brais\\ \hline
+    2.0 & 09/11/2021 & Julián y Brais\\ \hline
 \end{tabular}
 
 \end{center}
 \end{table}
 \end{flushright}
-
-
 \newpage
 \pagenumbering{arabic}
 
-
-%%%%%%%
-%%%%%%%
 \section{Introducción}\label{cap.introduccion}
 
 %%
@@ -127,17 +121,26 @@ Esencialmente la aplicación controlará el acceso del personal de un edificio. 
 El personal contara con un dispositivo con la tecnología NFC (mismamente su teléfono) el cual a la hora de entrar al edificio escanearan contra la aplicación de la puerta, que les garantizara el acceso en caso de cumplir los requisitos necesarios.
 %%
 \subsection{Funcionalidades}
+La aplicación como funcionalidad central tiene el control de aforo de un recinto. Si bien esta idea es bastante simple en un primer momento, la esencia del proyecto reside en su implementación. Sobre un control de aforo clásico como podría ser una persona asignada a llevar la cuenta de la ocupación en una entrada, se proponen una serie de funcionalidades que se implementaran de forma progresiva:
 \begin{itemize}
-    \item Garantizar o denegar el acceso al edificio
-    \item Controlar el horario de entrada y salida del personal
-    \item Conteo del aforo en un determinado momento
+    \item Actualizar el estado (entrada o salida) del sistema mediante dispositivos móviles con tecnología NFC.
+    \item Mantener un histórico a disposición de la administración de los accesos y salidas del recinto.
+    \item Establecer grupos de personal con franjas horarias de acceso.
+    \item Informar al usuario en su dispositivo en caso de que un intento de acceso haya sido denegado.
 \end{itemize}
 
 %%
 \subsection{Prioridades}
-Nuestra mayor prioridad sería la parte del conteo de personal en un determinado momento, que ya aportaría valor en sí a un establecimiento.
-Posteriormente implementaríamos la capacidad de permitir o no el acceso basado en horarios o aforo del edificio.
-En caso de que pudiéramos implementar funcionalidades accesorias, implementaríamos la capacidad de llevar un registro del aforo para poder controlar quien ha entrado  o salido del edificio un determinado día. Por otra parte estaría el añadir además de la tecnología NFC una alternativa un más transparente para facilitar el uso por parte de personas de accesibilidad reducida.
+El proyecto tiene como idea central la escalabilidad del mismo. Siendo una idea sencilla permite una alta cantidad de incrementos en función de los requisitos de una organización. Por ello las prioridades serán:
+\begin{enumerate}
+  \item Conteo de aforo en un único acceso mediante un único terminal de forma manual.
+  \item Implementación de un sistema de sincronización entre varios terminales para habilitar el uso en distintos accesos.
+  \item Implementación de una aplicación para el acceso mediante dispositivos individuales, permitiendo el control en varios accesos de forma automática
+  \item Registro de intentos de acceso y salida.
+  \item Posibilidad de crear grupos de usuarios con franjas horarias de acceso.
+\end{enumerate}
+
+Cabe destacar que independientemente de las prioridades previamente descritas, el proyecto pretende aumentar de tamaño capa a capa, de forma que cada nivel individual sea plenamente funcional por sí mismo.
 %%%%%%%
 %%%%%%%
 \section{Planificación inicial}
@@ -145,44 +148,53 @@ En caso de que pudiéramos implementar funcionalidades accesorias, implementarí
 %%
 \subsection{Iteraciones}
 \begin{enumerate}
-    \item Generar una aplicación que muestre el aforo en el momento actual y incremente o decremente de manera manual, según las personas salgan o entren.
-    \item Conseguir que este recuento se haga de manera automática al detectar la entrada y salida de usuarios.
+    \item Implementar una aplicación que muestre el aforo en el momento actual e incremente o decremente de manera manual, según las personas salgan o entren.
     \item Utilizar NFC \cite{NFC} para ser capaces de identificar a cada persona que entre de manera individual.
-    \item Una vez identificadas estas personas, ser capaces de comprobar con la información que tenemos si pueden acceder o no.
-    
+    \item Conseguir que este recuento se haga de manera automática al detectar la entrada y salida de usuarios.
+    \item Implementar un servidor que actualice los dispositivos de acceso para habilitar el uso simultáneo de varios accesos
+    \item Mantener un registro de accesos al registro a nivel individual.
+    \item Posibilidad de creación de grupos con franjas horarias de accesos.
 \end{enumerate}
 
 %%
 \subsection{Responsabilidades}
-Considerando que las responsabilidades del proyecto aumentaran de forma exponencial semana a semana, en un primer momento Brais se encargará de actualizar la documentación del proyecto y Julian se encargará de crear el proyecto inicial.
+Considerando que las responsabilidades del proyecto aumentaran de forma exponencial semana a semana, en un primer momento Brais se encargará de actualizar la documentación del proyecto y Julián se encargará de crear el proyecto inicial.
+Semana 08/10/2021 - Brais se encargará de la implementación de la tecnología NFC y Julián de implementar la estructura del proyecto.
 
 %%
 \subsection{Hitos}
-El desarrollo del proyecto se va a organizar en \textit{sprints} o secciones, ya que este esquema es el que más se adapta a la idea inicial que tenemos del proyecto.
+El desarrollo del proyecto se va a organizar en \textit{sprints}, ya que este esquema es el que más se adapta a la idea inicial que tenemos del proyecto.
 
 \begin{itemize}
-\item{Fase de planificación: Esta fase se centrará en crear una primera versión del proyecto, diseñando de manera esquemática funcionalidades e interfaz que serán utilizadas próximamente. En esta sección se incluye también la creación de este documento, que será modificado a lo largo del proyecto}
-\item{Fase de desarrollo de la aplicación: Esta fase centra el foco en integrar las funcionalidades y el diseño de la anterior iteración en la app móvil. Al final de esta etapa, se podría un realizar un test para comprobar el correcto funcionamiento de las funciones principales de la aplicación. El test se hará de manera manual, sobre un dispositivo físico, para evitar errores que puede ocultar el emulador.}
+\item{Fase de planificación: Esta fase se centrará en crear una primera versión del proyecto, diseñando de manera esquemática funcionalidades e interfaz que serán utilizadas próximamente. En esta sección se incluye también la creación de este documento, que será actualizado a lo largo del proyecto}
+\item{Fase de desarrollo de la aplicación: Esta fase centra el foco en integrar las funcionalidades y el diseño de la anterior iteración. Al final de esta etapa, se podría un realizar un test para comprobar el correcto funcionamiento de las funciones principales de la aplicación. El test se hará de manera manual, sobre un dispositivo físico, para evitar errores que puede ocultar el emulador.}
 \item{Integración del sistema de lectura: Esta sección se focalizará en integrar el método de NFC en las funcionalidades de la aplicación. Al finalizar esta tarea se podría realizar un test para comprobar la correcta lectura y reconocimiento de los dispositivos.}
+\item{Implementación del sistema centralizado: Permitir el acceso simultáneo entre varios dispositivos de control, mediante un servidor central.}
+\item{Registro de accesos y grupos por franjas horarias: Permitir el acceso a grupos de personal en función de franjas horarias y acceder a registros de acceso.}
+\item{Información de la petición en el dispositivo individual: Informar al usuario de si su intento de acceso ha sido aprobado, o de la denegación del mismo con una explicación breve.}
 \item{Posibles nuevas funcionalidades y cierre del proyecto: Esta última sección se centrará en añadir nuevas tareas, pero de pequeño tamaño que no pueden comprometer el cierre final del proyecto. Esta última tarea viene acompañada de pruebas sobre el funcionamiento completo de la aplicación.}
 \end{itemize}
 
 %%
 \subsection{Incidencias}
-El desarrollo inicial de la aplicación manual no debería suponer un contratiempo, ya que con lo que se ha visto hasta el momento la tarea se vuelve relativamente sencilla. Sin embargo, la segunda iteración puede suponer mayor conflicto porque se debe comprobar que se puede hacer uso del sistema NFC y que los dispositivos utilizados cuenten con el servicio.
+Si bien la naturaleza del proyecto es simple, se trata de una tecnología desconocida para el equipo de desarrollo. Esto se traducirá probablemente en un aumento de los tiempos de cada tarea.
+Sumado a esto, la comunicación NFC puede traer consigo distintas problemáticas, entre ellas la más evidente: se necesitarán varios dispositivos con dicha característica para poder comprobar el funcionamiento del sistema.
+Por otra parte, la sincronización de los dispositivos localizados en los accesos del recinto puede resultar complicada, ya que deben ser diseñados sin una interfaz de usuario debido a los requerimientos del proyecto.
 
 
 %%%%%%%
 %%%%%%%
 \section{Diseño}
 \subsection{Arquitectura}
+Se diseñará el proyecto con la arquitectura CLEAN en mente.
 Aprovechándonos de la orientación a eventos de Android, implementaremos un modelo vista presentador, donde un evento en el presentador, modificara la vista y llamara al modelo.
+En cuanto a la sincronización entre dispositivos, se implementará mediante el uso de un servidor principal con una interfaz API REST.
 %%
 \subsection{Persistencia}
 Guardar en local el estado actual del aforo
 Guardar en local el histórico de los accesos
 \subsection{Vista}
-Nuestro objetivo es la transparencia para el usuario, así que intentaremos mantener una vista simple con pocas opciones, de forma que cometer errores sea mas complicado.
+Nuestro objetivo es la transparencia para el usuario, así que intentaremos mantener una vista simple con pocas opciones, de forma que cometer errores sea más complicado.
 \subsection{Comunicaciones}
 Entre los dispositivos de acceso y un servidor en la nube como puede ser Firebase.
 \subsection{Sensores}
