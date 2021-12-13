@@ -16,6 +16,12 @@
     <string name="navigation_drawer_close">Cerrar menu lateral</string>
     <string name="browse_str">Buscar con:</string>
     <string name="share_text">Comparte la aplicacion: https://github.com/BraisBarboza/Portinas</string>
+    <string name="code_title">Utiliza el siguiente código para enlazar tu contador en ontro terminal:</string>
+    <string name="link_title">Añade el código de otro contador para enlazarlo a tu terminal:</string>
+    <string name="link_but">Enlazar contador</string>
+    <string name="link_et">Añadir contador</string>
+    <string name="defaultValue">default</string>
+    <string name="resetcode_but">Reiniciar código</string>
 
 
 </resources>
