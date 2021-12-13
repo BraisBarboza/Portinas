@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class AforoFragment extends Fragment {
     private onFragmentInterface listener;
     String AFORO_KEY= "AFORO";
@@ -21,6 +24,7 @@ public class AforoFragment extends Fragment {
     private int  aforo_total = 0;
     private Button  but_increment, but_decrement;
     private ProgressBar progressBar;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

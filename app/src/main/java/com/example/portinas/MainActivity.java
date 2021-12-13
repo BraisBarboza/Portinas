@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private DatabaseReference root = db.getReference().child("Aforo");
     private int final_value = 0;
     private Fragment aforo_fragment;
     @BindView(R.id.toolbar)
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num < aforo_total) {
             progr_num += 1;
         }
+        root.setValue(aforo_total);
         return progr_num;
     }
 
