@@ -16,6 +16,12 @@
     <string name="navigation_drawer_close">Cerrar menu lateral</string>
     <string name="browse_str">Buscar con:</string>
     <string name="share_text">Comparte la aplicacion: https://github.com/BraisBarboza/Portinas</string>
+    <string name="contador_str">Personalizar Contador</string>
+    <string name="limite_str">Límite de Aforo</string>
+    <string name="limite_sub">Añade la cantidad disponible de ocupación</string>
+    <string name="active_screen_str">Pantalla siempre activa</string>
+    <string name="active_screen_switch_str">No apagar ni atenuar la pantalla mientras se usa la aplicación.</string>
+    <string name="title_activity_settings">Ajustes</string>
 
 
 </resources>

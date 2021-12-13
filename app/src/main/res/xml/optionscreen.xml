@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory app:title="@string/contador_str">
+
+
+        <EditTextPreference
+            app:key="aforo_num"
+            android:textStyle="bold"
+            app:title="@string/limite_str"
+            app:subtitle="@string/limite_sub"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="@string/active_screen_str">
+
+
+        <SwitchPreferenceCompat
+            app:key="switch_screen"
+            app:title="@string/active_screen_switch_str"
+            android:lines="2"/>
+
+
+    </PreferenceCategory>
+
+    <Preference
+        app:key="feedback"
+        app:title="Send feedback"
+        app:summary="Report technical issues or suggest new features"/>
+
+</PreferenceScreen>
