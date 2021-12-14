@@ -1,5 +1,7 @@
 package com.example.portinas;
 
+import static com.example.portinas.MainActivity.mDatabase;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AforoFragment extends Fragment {
     private onFragmentInterface listener;
@@ -24,6 +29,7 @@ public class AforoFragment extends Fragment {
     private int  aforo_total = 0;
     private Button  but_increment, but_decrement;
     private ProgressBar progressBar;
+    int onlineCurrent, onlineTotal;
 
 
     @Override
@@ -71,8 +77,26 @@ public class AforoFragment extends Fragment {
         but_increment = view.findViewById(R.id.button_increase);
         progressBar = view.findViewById(R.id.progress_bar);
         aforo_total = listener.getAforo();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    currentvalue= Integer.parseInt(snapshot.child("Portinas").child("Prueba").child("Current").getValue().toString());
+                    aforo_total = Integer.parseInt(snapshot.child("Portinas").child("Prueba").child("Total").getValue().toString());
+                    progressBar.setMax(aforo_total);
+                    onUpdateProgressBar(currentvalue);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         progressBar.setMax(aforo_total);
         onUpdateProgressBar(currentvalue);
+
+
         but_increment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +113,8 @@ public class AforoFragment extends Fragment {
             }
         });
         return view;
+
+
 
     }
     public void onUpdateProgressBar(int value) {
