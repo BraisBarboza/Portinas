@@ -1,13 +1,12 @@
 package com.example.portinas;
 
+
 import android.content.Intent;
-import android.graphics.PostProcessor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,12 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -39,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int final_value = 0;
     private Fragment aforo_fragment;
     public static DatabaseReference mDatabase;
-    String mGroupId;
+    String mGroupId,codebutoff;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -80,13 +75,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         map.put("Current",0);
         map.put("Total",final_value);
 
-        mDatabase.child("Portinas").child("Prueba").updateChildren(map);
+
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
 
 
     }
-
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -147,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num < aforo_total) {
             progr_num += 1;
         }
-        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
 
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num > 0) {
             progr_num -= 1;
         }
-        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
 

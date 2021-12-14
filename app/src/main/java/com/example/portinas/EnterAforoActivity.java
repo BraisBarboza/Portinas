@@ -1,5 +1,6 @@
 package com.example.portinas;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,6 +16,7 @@ import butterknife.OnClick;
 public class EnterAforoActivity extends AppCompatActivity {
 
     public static String KEY_TEXT = "0568";
+    String aforo_total;
 
     @BindView(R.id.square_bt)
     Button Continuebut;
