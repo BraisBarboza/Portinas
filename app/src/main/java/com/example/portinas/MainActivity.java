@@ -1,11 +1,13 @@
 package com.example.portinas;
 
 import android.content.Intent;
+import android.graphics.PostProcessor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,8 +19,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,10 +36,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private DatabaseReference root = db.getReference().child("Aforo");
     private int final_value = 0;
     private Fragment aforo_fragment;
+    public static DatabaseReference mDatabase;
+    String mGroupId;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -41,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
@@ -64,9 +74,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState != null) {
             aforo_fragment = getSupportFragmentManager().getFragment(savedInstanceState, AFORO_FRAGMENT_KEY);
         }
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("Current",0);
+        map.put("Total",final_value);
+
+        mDatabase.child("Portinas").child("Prueba").updateChildren(map);
 
 
     }
+
 
 
     @Override
@@ -129,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num < aforo_total) {
             progr_num += 1;
         }
-        root.setValue(aforo_total);
+        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
         return progr_num;
     }
 
@@ -138,8 +156,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num > 0) {
             progr_num -= 1;
         }
+        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
         return progr_num;
     }
+
+
 
     @Override
     public int getAforo() {
