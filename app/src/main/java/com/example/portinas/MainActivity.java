@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,7 +28,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface, CodeFragment.onCodeInterface {
     String AFORO_FRAGMENT_KEY="AFORO_FRAGMENT_KEY";
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num < aforo_total) {
             progr_num += 1;
         }
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
@@ -150,16 +153,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num > 0) {
             progr_num -= 1;
         }
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
-
-
 
     @Override
     public int getAforo() {
         return final_value;
     }
 
+    @Override
+    public void refreshProgressBar(ProgressBar progressBar, TextView textView) {
+        progressBar.setProgress(0);
+        String total = PreferencesConfig.loadTotalfromPref(getApplicationContext());
+        textView.setText(0 + "/" + total);
+    }
 
+
+    @Override
+    public void createDatabase() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("Current",0);
+        map.put("Total",final_value);
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
+    }
 }

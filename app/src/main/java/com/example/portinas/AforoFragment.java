@@ -21,7 +21,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Random;
+
 public class AforoFragment extends Fragment {
+    private int n = 10000 + new Random().nextInt(90000);
     private onFragmentInterface listener;
     String AFORO_KEY= "AFORO";
     private int currentvalue;
@@ -37,7 +40,12 @@ public class AforoFragment extends Fragment {
         if (savedInstanceState != null) {
             currentvalue=savedInstanceState.getInt(AFORO_KEY,0);
             onUpdateProgressBar(currentvalue);
-
+        }
+        codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+        if (codebutoff.equals(getString(R.string.defaultValue)))
+        {
+            PreferencesConfig.saveCodeinPref(getContext(),String.valueOf(n));
+            codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
         }
     }
 
@@ -45,6 +53,7 @@ public class AforoFragment extends Fragment {
         public int onButtonIncrease(int progr_num, int aforo_total);
         public int onButtonDecrease(int progr_num, int aforo_total);
         public int getAforo();
+        public void refreshProgressBar(ProgressBar progressBar, TextView textView);
     }
 
     @Override
@@ -76,13 +85,13 @@ public class AforoFragment extends Fragment {
         but_increment = view.findViewById(R.id.button_increase);
         progressBar = view.findViewById(R.id.progress_bar);
         aforo_total = listener.getAforo();
-        codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.hasChild(codebutoff)) {
-                    currentvalue= Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(getString(R.string.app_name)).child(codebutoff).child("Current").getValue().toString());
-                    aforo_total = Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());
+                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                if (snapshot.exists() && snapshot.child(getString(R.string.app_name)).hasChild(codebutoff)) {
+                    currentvalue= Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Current").getValue().toString());
+                    aforo_total = Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());
                     progressBar.setMax(aforo_total);
                     onUpdateProgressBar(currentvalue);
                 }
