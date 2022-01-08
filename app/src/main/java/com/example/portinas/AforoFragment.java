@@ -5,6 +5,7 @@ import static com.example.portinas.CodeFragment.codebuton;
 import static com.example.portinas.MainActivity.mDatabase;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class AforoFragment extends Fragment {
@@ -31,6 +33,8 @@ public class AforoFragment extends Fragment {
     private int  aforo_total = 0;
     private Button  but_increment, but_decrement;
     private ProgressBar progressBar;
+    String boot = "Executed";
+
 
 
     @Override
@@ -41,6 +45,7 @@ public class AforoFragment extends Fragment {
             onUpdateProgressBar(currentvalue);
         }
     }
+
 
     public interface onFragmentInterface{
         public int onButtonIncrease(int progr_num, int aforo_total);
@@ -78,6 +83,7 @@ public class AforoFragment extends Fragment {
         but_increment = view.findViewById(R.id.button_increase);
         progressBar = view.findViewById(R.id.progress_bar);
         aforo_total = listener.getAforo();
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

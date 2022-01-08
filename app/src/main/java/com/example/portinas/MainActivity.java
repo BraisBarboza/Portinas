@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
@@ -71,11 +72,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (bundle != null) {
             String aforo_num = bundle.getString(EnterAforoActivity.KEY_TEXT);
             final_value = Integer.parseInt(aforo_num);
-            PreferencesConfig.saveTotalinPref(getApplicationContext(),final_value);
-        } else {
-            final_value = Integer.parseInt(PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString());
+            PreferencesConfig.saveTotalinPref(getApplicationContext(), final_value);
         }
-
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         map.put("Current",0);
         map.put("Total",final_value);
 
-
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         if (codebutoff.equals(getText(R.string.defaultValue)))
         {
@@ -102,7 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
         boolean notfirstboot = preferences.getBoolean(boot,false);
         if (!notfirstboot) {
-            mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(boot,true);
+            editor.apply();
+            mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
         }
 
 
@@ -202,13 +202,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setText(0 + "/" + total);
     }
 
-
     @Override
     public void createDatabase() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("Current",0);
         map.put("Total",final_value);
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
-        mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
     }
 }

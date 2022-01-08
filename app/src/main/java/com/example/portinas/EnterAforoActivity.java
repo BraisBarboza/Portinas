@@ -38,11 +38,10 @@ public class EnterAforoActivity extends AppCompatActivity {
         if (!notfirstboot) {
             setContentView(R.layout.activity_enteraforo);
             ButterKnife.bind(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(boot,true);
-            editor.apply();
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
+            intent.putExtra(KEY_TEXT, aforonum);
             startActivity(intent);
         }
     }
