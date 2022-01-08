@@ -31,9 +31,9 @@ public class PreferencesConfig {
         return pref.getString(PREFER_CODE_KEY, context.getString(R.string.defaultValue));
     }
 
-    public  static String loadTotalfromPref (Context context) {
+    public  static Integer loadTotalfromPref (Context context) {
         SharedPreferences pref = context.getSharedPreferences(MY_PREFERENCE_PORTINAS,context.MODE_PRIVATE);
-        return pref.getString(PREFER_TOTAL_KEY, context.getString(R.string.defaultValue));
+        return pref.getInt(PREFER_TOTAL_KEY, 0);
     }
 
 

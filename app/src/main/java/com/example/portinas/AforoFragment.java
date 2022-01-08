@@ -24,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Random;
 
 public class AforoFragment extends Fragment {
-    private int n = 10000 + new Random().nextInt(90000);
     private onFragmentInterface listener;
     String AFORO_KEY= "AFORO";
     private int currentvalue;
@@ -38,14 +37,8 @@ public class AforoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            currentvalue=savedInstanceState.getInt(AFORO_KEY,0);
+            currentvalue = savedInstanceState.getInt(AFORO_KEY, 0);
             onUpdateProgressBar(currentvalue);
-        }
-        codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
-        if (codebutoff.equals(getString(R.string.defaultValue)))
-        {
-            PreferencesConfig.saveCodeinPref(getContext(),String.valueOf(n));
-            codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
         }
     }
 
@@ -88,7 +81,7 @@ public class AforoFragment extends Fragment {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                codebutoff = PreferencesConfig.loadCodefromPref(getContext());
                 if (snapshot.exists() && snapshot.child(getString(R.string.app_name)).hasChild(codebutoff)) {
                     currentvalue= Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Current").getValue().toString());
                     aforo_total = Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());

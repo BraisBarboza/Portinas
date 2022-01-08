@@ -1,12 +1,16 @@
 package com.example.portinas;
 
 
+import static com.example.portinas.CodeFragment.codebutoff;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment aforo_fragment;
     public static DatabaseReference mDatabase;
     String mGroupId,codebutoff;
+    private int n = 10000 + new Random().nextInt(90000);
+    private long backPressedTime;
+    private  Toast backToast;
+    String boot = "Executed";
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -61,7 +71,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (bundle != null) {
             String aforo_num = bundle.getString(EnterAforoActivity.KEY_TEXT);
             final_value = Integer.parseInt(aforo_num);
+            PreferencesConfig.saveTotalinPref(getApplicationContext(),final_value);
+        } else {
+            final_value = Integer.parseInt(PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString());
         }
+
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -79,7 +93,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
-        mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
+        if (codebutoff.equals(getText(R.string.defaultValue)))
+        {
+            PreferencesConfig.saveCodeinPref(getApplicationContext(),String.valueOf(n));
+            codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        }
+
+        SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
+        boolean notfirstboot = preferences.getBoolean(boot,false);
+        if (!notfirstboot) {
+            mDatabase.child(getString(R.string.app_name)).child(codebutoff).updateChildren(map);
+        }
 
 
     }
@@ -88,7 +112,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                backToast.cancel();
+                super.onBackPressed();
+                return;
+            } else {
+                backToast = Toast.makeText(getBaseContext(), getText(R.string.backpress), Toast.LENGTH_SHORT);
+                backToast.show();
+            }
+            backPressedTime = System.currentTimeMillis();
         }
 
     }
@@ -166,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void refreshProgressBar(ProgressBar progressBar, TextView textView) {
         progressBar.setProgress(0);
-        String total = PreferencesConfig.loadTotalfromPref(getApplicationContext());
+        String total = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
         textView.setText(0 + "/" + total);
     }
 

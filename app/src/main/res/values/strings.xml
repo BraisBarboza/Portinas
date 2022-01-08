@@ -22,6 +22,7 @@
     <string name="link_et">Añadir contador</string>
     <string name="defaultValue">default</string>
     <string name="resetcode_but">Reiniciar código</string>
+    <string name="backpress">\Presiona otra vez para salir</string>
 
 
 </resources>
