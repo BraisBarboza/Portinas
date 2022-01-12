@@ -116,10 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                         new CodeFragment()).commitNow();
                 break;
-            case R.id.nav_bluetooth:
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                        new BluetoothFragment()).commit();
-                break;
             case R.id.nav_nfc:
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                         new NFCFragment()).commit();
@@ -130,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(Intent.createChooser(intent, getString(R.string.browse_str)));
                 break;
             case R.id.nav_settings:
+                Intent intentsetting = new Intent(this, SettingsActivity.class);
+                startActivity(intentsetting);
+
                 break;
             case R.id.nav_compartir:
                 Intent intentSend = new Intent(Intent.ACTION_SEND);
