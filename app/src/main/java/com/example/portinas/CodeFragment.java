@@ -1,9 +1,13 @@
 package com.example.portinas;
 
+import static com.example.portinas.MainActivity.mDatabase;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,16 +16,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.HashMap;
 import java.util.Random;
 
-import butterknife.BindView;
+public class CodeFragment extends Fragment  {
 
-public class CodeFragment extends Fragment {
-
-    private int n = 10000 + new Random().nextInt(90000);
-    String code,codebut;
+    public static String codebutoff, codebuton = "";
     private TextView textViewcode;
     Button resetbut, linkbut;
+    EditText linket;
+    private CodeFragment.onCodeInterface listener;
+    private static  int linked =0;
+
+    public interface onCodeInterface{
+        public void createDatabase();
+    }
 
     @Nullable
     @Override
@@ -30,26 +39,65 @@ public class CodeFragment extends Fragment {
         textViewcode = view.findViewById(R.id.code);
         resetbut = view.findViewById(R.id.resetcode_but);
         linkbut = view.findViewById(R.id.link_but);
+        linket = view.findViewById(R.id.link_et);
 
-        code = PreferencesConfig.loadCodefromPref(getActivity());
-        if (code.equals(getString(R.string.defaultValue)))
-        {
-            PreferencesConfig.saveCodeinPref(getContext(),String.valueOf(n));
-        }
+        codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
 
-        textViewcode.setText(code);
+        textViewcode.setText(codebutoff);
 
         resetbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (linked != 1) {
+                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).removeValue();
+                    linked = 0;
+                }
                 int n2 = 10000 + new Random().nextInt(90000);
                 PreferencesConfig.saveCodeinPref(getContext(),String.valueOf(n2));
-                codebut = PreferencesConfig.loadCodefromPref(getActivity());
-                textViewcode.setText(codebut);
+                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                textViewcode.setText(codebutoff);
+                listener.createDatabase();
+
+
+            }
+        });
+
+        linkbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabase.child(getString(R.string.app_name)).child(codebutoff).removeValue();
+                String edcode = linket.getText().toString();
+                PreferencesConfig.saveCodeinPref(getContext(),edcode);
+                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                textViewcode.setText(codebutoff);
+                close_keyboard();
+                linked = 1;
             }
         });
         return view;
     }
+
+    private void close_keyboard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (CodeFragment.onCodeInterface) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " implement createDatabase");
+        }
+
+    }
+
+
 
 
 }

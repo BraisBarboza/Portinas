@@ -1,13 +1,18 @@
 package com.example.portinas;
 
+
+import static com.example.portinas.CodeFragment.codebutoff;
+
 import android.content.Intent;
-import android.graphics.PostProcessor;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,19 +24,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface, CodeFragment.onCodeInterface {
     String AFORO_FRAGMENT_KEY="AFORO_FRAGMENT_KEY";
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
@@ -39,7 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int final_value = 0;
     private Fragment aforo_fragment;
     public static DatabaseReference mDatabase;
-    String mGroupId;
+    String mGroupId,codebutoff;
+    private int n = 10000 + new Random().nextInt(90000);
+    private long backPressedTime;
+    private  Toast backToast;
+    String boot = "Executed";
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (bundle != null) {
             String aforo_num = bundle.getString(EnterAforoActivity.KEY_TEXT);
             final_value = Integer.parseInt(aforo_num);
+            PreferencesConfig.saveTotalinPref(getApplicationContext(), final_value);
         }
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -80,19 +89,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         map.put("Current",0);
         map.put("Total",final_value);
 
-        mDatabase.child("Portinas").child("Prueba").updateChildren(map);
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        if (codebutoff.equals(getText(R.string.defaultValue)))
+        {
+            PreferencesConfig.saveCodeinPref(getApplicationContext(),String.valueOf(n));
+            codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        }
+
+        SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
+        boolean notfirstboot = preferences.getBoolean(boot,false);
+        if (!notfirstboot) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(boot,true);
+            editor.apply();
+            mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
+        }
 
 
     }
-
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                backToast.cancel();
+                super.onBackPressed();
+                return;
+            } else {
+                backToast = Toast.makeText(getBaseContext(), getText(R.string.backpress), Toast.LENGTH_SHORT);
+                backToast.show();
+            }
+            backPressedTime = System.currentTimeMillis();
         }
 
     }
@@ -146,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num < aforo_total) {
             progr_num += 1;
         }
-        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
 
@@ -155,16 +184,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (progr_num > 0) {
             progr_num -= 1;
         }
-        mDatabase.child("Portinas").child("Prueba").child("Current").setValue(progr_num);
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
         return progr_num;
     }
-
-
 
     @Override
     public int getAforo() {
         return final_value;
     }
 
+    @Override
+    public void refreshProgressBar(ProgressBar progressBar, TextView textView) {
+        progressBar.setProgress(0);
+        String total = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
+        textView.setText(0 + "/" + total);
+    }
 
+    @Override
+    public void createDatabase() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("Current",0);
+        map.put("Total",final_value);
+        codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
+    }
 }

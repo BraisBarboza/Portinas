@@ -28,6 +28,7 @@
     <string name="active_screen_str">Pantalla siempre activa</string>
     <string name="active_screen_switch_str">No apagar ni atenuar la pantalla mientras se usa la aplicación.</string>
     <string name="title_activity_settings">Ajustes</string>
+    <string name="backpress">\Presiona otra vez para salir</string>
 
 
 </resources>

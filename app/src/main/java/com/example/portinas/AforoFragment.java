@@ -1,8 +1,11 @@
 package com.example.portinas;
 
+import static com.example.portinas.CodeFragment.codebutoff;
+import static com.example.portinas.CodeFragment.codebuton;
 import static com.example.portinas.MainActivity.mDatabase;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +20,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class AforoFragment extends Fragment {
     private onFragmentInterface listener;
@@ -29,23 +33,25 @@ public class AforoFragment extends Fragment {
     private int  aforo_total = 0;
     private Button  but_increment, but_decrement;
     private ProgressBar progressBar;
-    int onlineCurrent, onlineTotal;
+    String boot = "Executed";
+
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            currentvalue=savedInstanceState.getInt(AFORO_KEY,0);
+            currentvalue = savedInstanceState.getInt(AFORO_KEY, 0);
             onUpdateProgressBar(currentvalue);
-
         }
     }
+
 
     public interface onFragmentInterface{
         public int onButtonIncrease(int progr_num, int aforo_total);
         public int onButtonDecrease(int progr_num, int aforo_total);
         public int getAforo();
+        public void refreshProgressBar(ProgressBar progressBar, TextView textView);
     }
 
     @Override
@@ -77,12 +83,14 @@ public class AforoFragment extends Fragment {
         but_increment = view.findViewById(R.id.button_increase);
         progressBar = view.findViewById(R.id.progress_bar);
         aforo_total = listener.getAforo();
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    currentvalue= Integer.parseInt(snapshot.child("Portinas").child("Prueba").child("Current").getValue().toString());
-                    aforo_total = Integer.parseInt(snapshot.child("Portinas").child("Prueba").child("Total").getValue().toString());
+                codebutoff = PreferencesConfig.loadCodefromPref(getContext());
+                if (snapshot.exists() && snapshot.child(getString(R.string.app_name)).hasChild(codebutoff)) {
+                    currentvalue= Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Current").getValue().toString());
+                    aforo_total = Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());
                     progressBar.setMax(aforo_total);
                     onUpdateProgressBar(currentvalue);
                 }
@@ -94,8 +102,8 @@ public class AforoFragment extends Fragment {
             }
         });
         progressBar.setMax(aforo_total);
+        PreferencesConfig.saveTotalinPref(getContext(),aforo_total);
         onUpdateProgressBar(currentvalue);
-
 
         but_increment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,8 +121,6 @@ public class AforoFragment extends Fragment {
             }
         });
         return view;
-
-
 
     }
     public void onUpdateProgressBar(int value) {

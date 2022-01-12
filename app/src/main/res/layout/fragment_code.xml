@@ -52,7 +52,9 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_toStartOf="@+id/link_but"
-        android:text="@string/link_et"></EditText>
+        android:hint="@string/link_et"
+        android:maxLength="5"
+        android:inputType="number"></EditText>
 
     <Button
         android:id="@+id/link_but"

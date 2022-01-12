@@ -1,8 +1,12 @@
 package com.example.portinas;
 
+
+import static com.example.portinas.CodeFragment.codebutoff;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +18,10 @@ import butterknife.OnClick;
 
 public class EnterAforoActivity extends AppCompatActivity {
 
-    public static String KEY_TEXT = "0568";
 
+    public static String KEY_TEXT = "0568";
+    String aforo_total;
+    String boot = "Executed";
     @BindView(R.id.square_bt)
     Button Continuebut;
     @BindView(R.id.square_edtxt)
@@ -25,9 +31,19 @@ public class EnterAforoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
+        boolean notfirstboot = preferences.getBoolean(boot,false);
+
         setTheme(R.style.Theme_Portinas);
-        setContentView(R.layout.activity_enteraforo);
-        ButterKnife.bind(this);
+        if (!notfirstboot) {
+            setContentView(R.layout.activity_enteraforo);
+            ButterKnife.bind(this);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
+            intent.putExtra(KEY_TEXT, aforonum);
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.square_bt)
