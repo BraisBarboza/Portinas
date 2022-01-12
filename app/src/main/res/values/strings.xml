@@ -29,6 +29,14 @@
     <string name="active_screen_switch_str">No apagar ni atenuar la pantalla mientras se usa la aplicación.</string>
     <string name="title_activity_settings">Ajustes</string>
     <string name="backpress">\Presiona otra vez para salir</string>
+    <string name="nfc_default_tv_text">123123123</string>
+    <string name="no_nfc_toast_text">NFC no esta disponible</string>
+    <string name="nfc_button_write">Escribir</string>
+    <string name="nfc_button_read">Leer</string>
+    <string name="nfc_default_tv_text_read">Leo:</string>
+    <string name="nfc_error_detected">No se han encontrado dispositivos NFC</string>
+    <string name="nfc_write_success">Enviado Correctamente</string>
+    <string name="nfc_write_error">No se pudo escribir</string>
 
 
 </resources>
