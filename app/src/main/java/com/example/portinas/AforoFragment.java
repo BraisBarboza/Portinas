@@ -93,6 +93,7 @@ public class AforoFragment extends Fragment {
                     aforo_total = Integer.parseInt(snapshot.child(getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());
                     progressBar.setMax(aforo_total);
                     onUpdateProgressBar(currentvalue);
+
                 }
             }
 

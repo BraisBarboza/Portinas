@@ -30,6 +30,7 @@
     <string name="title_activity_settings">Ajustes</string>
     <string name="backpress">\Presiona otra vez para salir</string>
     <string name="help_str">Ayuda</string>
+    <string name="full_str">Aforo Completo</string>
 
 
 </resources>

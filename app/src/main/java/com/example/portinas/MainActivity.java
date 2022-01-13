@@ -176,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public int onButtonIncrease(int progr_num, int aforo_total) {
         if (progr_num < aforo_total) {
             progr_num += 1;
+        } else {
+            Toast.makeText(getApplicationContext(),getString(R.string.full_str),Toast.LENGTH_SHORT).show();
         }
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
