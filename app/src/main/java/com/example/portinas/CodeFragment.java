@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,13 +66,17 @@ public class CodeFragment extends Fragment  {
         linkbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.child(getString(R.string.app_name)).child(codebutoff).removeValue();
-                String edcode = linket.getText().toString();
-                PreferencesConfig.saveCodeinPref(getContext(),edcode);
-                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
-                textViewcode.setText(codebutoff);
-                close_keyboard();
-                linked = 1;
+                if(linket.getText().toString().equals("")){
+                    Toast.makeText(getActivity(), getText(R.string.insertcode), Toast.LENGTH_SHORT).show();
+                } else {
+                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).removeValue();
+                    String edcode = linket.getText().toString();
+                    PreferencesConfig.saveCodeinPref(getContext(), edcode);
+                    codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                    textViewcode.setText(codebutoff);
+                    close_keyboard();
+                    linked = 1;
+                }
             }
         });
         return view;
