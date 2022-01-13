@@ -164,7 +164,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intentSend.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                 startActivity(intentSend);
                 break;
+            default:
+                return true;
         }
+        
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -191,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public int getAforo() {
-        return final_value;
+        return Integer.valueOf(PreferencesConfig.loadTotalfromPref(getApplicationContext()));
     }
 
     @Override

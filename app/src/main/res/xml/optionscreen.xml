@@ -7,7 +7,8 @@
 
 
         <EditTextPreference
-            app:key="aforo_num"
+            app:key="pref_saved_total"
+            android:inputType="number"
             android:textStyle="bold"
             app:title="@string/limite_str"
             app:subtitle="@string/limite_sub"
@@ -27,9 +28,12 @@
 
     </PreferenceCategory>
 
+
+    <PreferenceCategory app:title="@string/help_str">
     <Preference
         app:key="feedback"
-        app:title="Send feedback"
-        app:summary="Report technical issues or suggest new features"/>
+        app:title="Envie Feedback"
+        app:summary="Háganos saber de cualquier tipo de errores o nuevas ideas"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

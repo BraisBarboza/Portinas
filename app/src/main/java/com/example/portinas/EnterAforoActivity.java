@@ -40,7 +40,7 @@ public class EnterAforoActivity extends AppCompatActivity {
             ButterKnife.bind(this);
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
+            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext());
             intent.putExtra(KEY_TEXT, aforonum);
             startActivity(intent);
         }
