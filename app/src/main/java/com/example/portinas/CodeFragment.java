@@ -61,8 +61,8 @@ public class CodeFragment extends Fragment  {
                     linked = 0;
                 }
                 int n2 = 10000 + new Random().nextInt(90000);
-                PreferencesConfig.saveCodeinPref(getContext(),String.valueOf(n2));
-                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                PreferencesConfig.saveCodeinPref(context,String.valueOf(n2));
+                codebutoff = PreferencesConfig.loadCodefromPref(context);
                 textViewcode.setText(codebutoff);
                 listener.createDatabase();
                 reset = 1;
@@ -83,11 +83,11 @@ public class CodeFragment extends Fragment  {
                             PreferencesConfig.saveCodeinPref(context,edcode);
                             codebutoff = PreferencesConfig.loadCodefromPref(context);
                             textViewcode.setText(codebutoff);
-                            close_keyboard();
+                            //close_keyboard();
                             linked = 1;
                         } else {
                             if ( reset  == 0)
-                            Toast.makeText(getContext(),context.getString(R.string.insertcode) + edcode,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,context.getString(R.string.insertcode) + edcode,Toast.LENGTH_SHORT).show();
                             reset = 1;
                         }
                     }
@@ -105,13 +105,13 @@ public class CodeFragment extends Fragment  {
         return view;
     }
 
-    private void close_keyboard() {
+    /*private void close_keyboard() {
         View view = getActivity().getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }
+    }*/
 
     @Override
     public void onAttach(@NonNull Context context) {
