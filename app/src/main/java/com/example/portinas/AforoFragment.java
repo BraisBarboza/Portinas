@@ -62,7 +62,7 @@ public class AforoFragment extends Fragment {
             //Restore the fragment's state here
             currentvalue = 0;
         } else {
-            currentvalue =  savedInstanceState.getInt("aforo",7);
+            currentvalue =  savedInstanceState.getInt("aforo",0);
             onUpdateProgressBar(currentvalue);
         }
     }
@@ -92,6 +92,9 @@ public class AforoFragment extends Fragment {
                 if (snapshot.exists() && snapshot.child(context.getString(R.string.app_name)).hasChild(codebutoff)) {
                     currentvalue= Integer.parseInt(snapshot.child(context.getString(R.string.app_name)).child(codebutoff).child("Current").getValue().toString());
                     aforo_total = Integer.parseInt(snapshot.child(context.getString(R.string.app_name)).child(codebutoff).child("Total").getValue().toString());
+                    if (currentvalue > aforo_total) {
+                        currentvalue = 0;
+                    }
                     progressBar.setMax(aforo_total);
                     onUpdateProgressBar(currentvalue);
 

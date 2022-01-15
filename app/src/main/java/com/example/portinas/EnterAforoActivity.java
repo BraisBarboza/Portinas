@@ -35,7 +35,7 @@ public class EnterAforoActivity extends AppCompatActivity {
         SharedPreferences preferencesboot = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
         boolean notfirstboot = preferencesboot.getBoolean(boot,false);
         SharedPreferences preferences = getSharedPreferences("com.example.portinas_preferences",MODE_PRIVATE);
-        String aforo = preferencesboot.getString(PREFER_TOTAL_KEY,"0");
+        String aforo = preferencesboot.getString(PREFER_TOTAL_KEY,"-1");
 
 
         setTheme(R.style.Theme_Portinas);
