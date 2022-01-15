@@ -37,6 +37,7 @@
     <string name="nfc_error_detected">No se han encontrado dispositivos NFC</string>
     <string name="nfc_write_success">Enviado Correctamente</string>
     <string name="nfc_write_error">No se pudo escribir</string>
+    <string name="NFC_information_panel">Acerca una nueva tarjeta NFC para habilitarla en el sistema</string>
 
 
 </resources>

@@ -31,7 +31,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,26 +47,27 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface, CodeFragment.onCodeInterface,NFCFragment.onNFCFragmentInterface {
-    String AFORO_FRAGMENT_KEY="AFORO_FRAGMENT_KEY";
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AforoFragment.onFragmentInterface, CodeFragment.onCodeInterface, NFCFragment.onNFCFragmentInterface {
+    String AFORO_FRAGMENT_KEY = "AFORO_FRAGMENT_KEY";
     private ActionBarDrawerToggle toggle;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private int final_value = 0;
     private Fragment aforo_fragment;
     public static DatabaseReference mDatabase;
-    String mGroupId,codebutoff;
+    String mGroupId, codebutoff;
     private int n = 10000 + new Random().nextInt(90000);
     private long backPressedTime;
-    private  Toast backToast;
+    private Toast backToast;
     String boot = "Executed";
     NfcAdapter nfcAdapter;
     PendingIntent pendingIntent;
     IntentFilter writingTagFilters[];
     boolean writeMode;
     Tag myTag;
+    int logged, current;
+    String tag;
     //TODO: Meter los tags NFC en firebase
-    ArrayList TagsDentro;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -75,14 +79,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        TagsDentro=new ArrayList();
+
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         navigationView.setNavigationItemSelectedListener(this);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, new AforoFragment(),AFORO_FRAGMENT_KEY);
+        fragmentTransaction.add(R.id.fragment_container, new AforoFragment(), AFORO_FRAGMENT_KEY);
         fragmentTransaction.commit();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -102,27 +107,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("Current",0);
-        map.put("Total",final_value);
+        map.put("Current", 0);
+        map.put("Total", final_value);
+
 
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
-        if (codebutoff.equals(getText(R.string.defaultValue)))
-        {
-            PreferencesConfig.saveCodeinPref(getApplicationContext(),String.valueOf(n));
+        if (codebutoff.equals(getText(R.string.defaultValue))) {
+            PreferencesConfig.saveCodeinPref(getApplicationContext(), String.valueOf(n));
             codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         }
 
-        SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
-        boolean notfirstboot = preferences.getBoolean(boot,false);
+        SharedPreferences preferences = getSharedPreferences("BOOT_PREF", MODE_PRIVATE);
+        boolean notfirstboot = preferences.getBoolean(boot, false);
         if (!notfirstboot) {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(boot,true);
+            editor.putBoolean(boot, true);
             editor.apply();
             mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
         }
 
 
     }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -151,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        aforo_fragment=getSupportFragmentManager().findFragmentByTag(AFORO_FRAGMENT_KEY);
+        aforo_fragment = getSupportFragmentManager().findFragmentByTag(AFORO_FRAGMENT_KEY);
         switch (item.getItemId()) {
             case R.id.nav_aforo:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, aforo_fragment).commitNow();
@@ -220,71 +226,122 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void createDatabase() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("Current",0);
-        map.put("Total",final_value);
+        map.put("Current", 0);
+        map.put("Total", final_value);
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         mDatabase.child(getString(R.string.app_name)).child(codebutoff).setValue(map);
     }
 
     @Override
-    public void onWriteNFCPressed(String string) {
+    public String onWriteNFCPressed(String string) {
+        String text;
         try {
-
             if (myTag == null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.nfc_error_detected), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.nfc_error_detected), Toast.LENGTH_SHORT).show();
             } else {
                 writeNFC(string, myTag);
-                Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_success), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_success), Toast.LENGTH_SHORT).show();
             }
-        }catch (IOException e){
-            Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_error), Toast.LENGTH_LONG ).show();
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_error), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        }catch (FormatException e){
-            Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_error), Toast.LENGTH_LONG ).show();
+        } catch (FormatException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.nfc_write_error), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
-        nfcAdapter=NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter==null){
-            Toast.makeText(this, getString(R.string.no_nfc_toast_text),Toast.LENGTH_LONG).show();
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter == null) {
+            Toast.makeText(this, getString(R.string.no_nfc_toast_text), Toast.LENGTH_LONG).show();
         }
-        readFromIntent(getIntent());
-        pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),0);
+        text = readFromIntent(getIntent());
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
-        writingTagFilters=new IntentFilter[] {tagDetected};
+        writingTagFilters = new IntentFilter[]{tagDetected};
+        return text;
 
     }
-    public void readFromIntent(Intent intent){
+
+    public String readFromIntent(Intent intent) {
         String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action) || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)){
-            Parcelable[] rawMsgs= intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action) || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage[] msgs = null;
-            if (rawMsgs !=null){
+            if (rawMsgs != null) {
                 msgs = new NdefMessage[rawMsgs.length];
                 for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i]=(NdefMessage) rawMsgs[i];
+                    msgs[i] = (NdefMessage) rawMsgs[i];
                 }
             }
-            buildTagViews(msgs);
+            return buildTagViews(msgs);
         }
+        return null;
     }
-    private void buildTagViews(NdefMessage[] msgs){
-        if (msgs == null || msgs.length ==0) return ;
-        String text="";
-        byte[] payload = msgs[0].getRecords() [0].getPayload();
-        String textEncoding = ((payload[0]&128)==0) ? "UTF-8" : "UTF-16";
-        int languageCodeLength = payload[0]& 0063;
-        try{
-            text=new String(payload,languageCodeLength+1,payload.length-languageCodeLength-1, textEncoding);
 
-        }catch (UnsupportedEncodingException e){
+    private String buildTagViews(NdefMessage[] msgs) {
+        if (msgs == null || msgs.length == 0) return null;
+        String text = "";
+        byte[] payload = msgs[0].getRecords()[0].getPayload();
+        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+        int languageCodeLength = payload[0] & 0063;
+        try {
+            text = new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+
+        } catch (UnsupportedEncodingException e) {
             Log.e("UnsupportedEncoding", e.toString());
         }
-        TagsDentro.add(text);
-        
+        increaseAforoNFC(text);
+
+
+        return text;
 
     }
-    private void writeNFC(String text, Tag tag) throws IOException, FormatException{
+
+    private void increaseAforoNFC(String ID) {
+        mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    current = Integer.parseInt(String.valueOf(task.getResult().getValue()));
+                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("firebase", "Error getting data", task.getException());
+                            } else {
+                                if(!task.getResult().hasChild(ID)) {
+                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child(ID).setValue(1);
+                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(current + 1);
+                                    return;
+
+                                }else{
+                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child(ID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                            if (!task.isSuccessful()) {
+                                                Log.e("firebase", "Error getting data", task.getException());
+                                            } else {
+                                                if (Integer.parseInt(String.valueOf(task.getResult().getValue())) == 1) {
+                                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(current - 1);
+                                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child(ID).setValue(0);
+                                                } else {
+                                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(current + 1);
+                                                    mDatabase.child(getString(R.string.app_name)).child(codebutoff).child(ID).setValue(1);
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void writeNFC(String text, Tag tag) throws IOException, FormatException {
         NdefRecord[] records = {createRecord(text)};
         NdefMessage message = new NdefMessage(records);
         Ndef ndef = Ndef.get(tag);
@@ -292,16 +349,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ndef.writeNdefMessage(message);
         ndef.close();
     }
-    private NdefRecord createRecord(String text) throws UnsupportedEncodingException{
+
+    private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
         String lang = "en";
         byte[] textBytes = text.getBytes();
         byte[] langBytes = lang.getBytes("US-ASCII");
         int langLength = langBytes.length;
         int textLength = textBytes.length;
-        byte[] payload = new byte[1+ langLength+textLength];
+        byte[] payload = new byte[1 + langLength + textLength];
         payload[0] = (byte) langLength;
-        System.arraycopy(langBytes,0,payload,1,langLength);
-        System.arraycopy(textBytes,0,payload,1+langLength,textLength);
+        System.arraycopy(langBytes, 0, payload, 1, langLength);
+        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
         NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
         return recordNFC;
 
@@ -312,8 +370,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onNewIntent(intent);
         setIntent(intent);
         readFromIntent(intent);
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
-            myTag=intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         }
     }
 
@@ -329,11 +387,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         WriteModeOff();
     }
 
-    private void WriteModeOn(){
+    private void WriteModeOn() {
         writeMode = true;
-        nfcAdapter.enableForegroundDispatch(this,pendingIntent,writingTagFilters, null);
+        if (nfcAdapter == null) {
+            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        }
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, writingTagFilters, null);
     }
-    private void WriteModeOff(){
+
+    private void WriteModeOff() {
         writeMode = false;
         nfcAdapter.disableForegroundDispatch(this);
     }
