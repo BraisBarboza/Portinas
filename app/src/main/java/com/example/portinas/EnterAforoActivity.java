@@ -20,8 +20,9 @@ public class EnterAforoActivity extends AppCompatActivity {
 
 
     public static String KEY_TEXT = "0568";
+    private static final String PREFER_TOTAL_KEY = "pref_saved_total";
     String aforo_total;
-    String boot = "Executed";
+    private static final String boot = "Executed";
     @BindView(R.id.square_bt)
     Button Continuebut;
     @BindView(R.id.square_edtxt)
@@ -31,16 +32,19 @@ public class EnterAforoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
-        boolean notfirstboot = preferences.getBoolean(boot,false);
+        SharedPreferences preferencesboot = getSharedPreferences("BOOT_PREF",MODE_PRIVATE);
+        boolean notfirstboot = preferencesboot.getBoolean(boot,false);
+        SharedPreferences preferences = getSharedPreferences("com.example.portinas_preferences",MODE_PRIVATE);
+        String aforo = preferencesboot.getString(PREFER_TOTAL_KEY,"-1");
+
 
         setTheme(R.style.Theme_Portinas);
-        if (!notfirstboot) {
+        if (!notfirstboot || (aforo.equals("0")) ) {
             setContentView(R.layout.activity_enteraforo);
             ButterKnife.bind(this);
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext()).toString();
+            String aforonum = PreferencesConfig.loadTotalfromPref(getApplicationContext());
             intent.putExtra(KEY_TEXT, aforonum);
             startActivity(intent);
         }

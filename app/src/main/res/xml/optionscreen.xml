@@ -7,7 +7,8 @@
 
 
         <EditTextPreference
-            app:key="aforo_num"
+            app:key="pref_saved_total"
+            android:inputType="number"
             android:textStyle="bold"
             app:title="@string/limite_str"
             app:subtitle="@string/limite_sub"
@@ -15,21 +16,5 @@
 
     </PreferenceCategory>
 
-
-    <PreferenceCategory app:title="@string/active_screen_str">
-
-
-        <SwitchPreferenceCompat
-            app:key="switch_screen"
-            app:title="@string/active_screen_switch_str"
-            android:lines="2"/>
-
-
-    </PreferenceCategory>
-
-    <Preference
-        app:key="feedback"
-        app:title="Send feedback"
-        app:summary="Report technical issues or suggest new features"/>
 
 </PreferenceScreen>

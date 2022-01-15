@@ -178,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 Intent intentsetting = new Intent(this, SettingsActivity.class);
                 startActivity(intentsetting);
+                String aux= PreferencesConfig.loadTotalfromPref(this);
+                mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Total").setValue(Integer.valueOf(aux));
 
                 break;
             case R.id.nav_compartir:
@@ -186,7 +188,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intentSend.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
                 startActivity(intentSend);
                 break;
+            default:
+                return true;
         }
+        
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -195,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public int onButtonIncrease(int progr_num, int aforo_total) {
         if (progr_num < aforo_total) {
             progr_num += 1;
+        } else {
+            Toast.makeText(getApplicationContext(),getString(R.string.full_str),Toast.LENGTH_SHORT).show();
         }
         codebutoff = PreferencesConfig.loadCodefromPref(getApplicationContext());
         mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Current").setValue(progr_num);
@@ -213,7 +220,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public int getAforo() {
-        return final_value;
+        return Integer.parseInt(PreferencesConfig.loadTotalfromPref(this));
+
     }
 
     @Override

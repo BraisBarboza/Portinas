@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 public class PreferencesConfig {
 
-    private static final String MY_PREFERENCE_PORTINAS = "com.example.portinas";
+    private static final String MY_PREFERENCE_PORTINAS = "com.example.portinas_preferences";
     private static final String PREFER_CODE_KEY = "pref_code_key";
     private static final String PREFER_TOTAL_KEY = "pref_saved_total";
     ;
@@ -21,7 +21,7 @@ public class PreferencesConfig {
     public static  void saveTotalinPref(Context context, int total) {
         SharedPreferences pref = context.getSharedPreferences(MY_PREFERENCE_PORTINAS,context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(PREFER_TOTAL_KEY,total);
+        editor.putString(PREFER_TOTAL_KEY,String.valueOf(total));
         editor.apply();
         editor.commit();
     }
@@ -31,9 +31,9 @@ public class PreferencesConfig {
         return pref.getString(PREFER_CODE_KEY, context.getString(R.string.defaultValue));
     }
 
-    public  static Integer loadTotalfromPref (Context context) {
+    public  static String loadTotalfromPref (Context context) {
         SharedPreferences pref = context.getSharedPreferences(MY_PREFERENCE_PORTINAS,context.MODE_PRIVATE);
-        return pref.getInt(PREFER_TOTAL_KEY, 0);
+        return pref.getString(PREFER_TOTAL_KEY, "");
     }
 
 
