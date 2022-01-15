@@ -40,7 +40,6 @@
     <string name="NFC_information_panel">Acerca una nueva tarjeta NFC para habilitarla en el sistema</string>
     <string name="help_str">Ayuda</string>
     <string name="full_str">Aforo Completo</string>
-    <string name="insertcode">El codigo no existe:</string>
     <string name="purpouse">Una aplicaciónd de control de aforo</string>
     <string name="nav_us">Información</string>
     <string name="nav_settings">Configuración</string>
