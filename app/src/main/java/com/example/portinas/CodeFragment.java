@@ -11,10 +11,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -27,6 +32,9 @@ public class CodeFragment extends Fragment  {
     EditText linket;
     private CodeFragment.onCodeInterface listener;
     private static  int linked =0;
+    private Context context;
+    private static int reset = 2;
+
 
     public interface onCodeInterface{
         public void createDatabase();
@@ -41,7 +49,7 @@ public class CodeFragment extends Fragment  {
         linkbut = view.findViewById(R.id.link_but);
         linket = view.findViewById(R.id.link_et);
 
-        codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+        codebutoff = PreferencesConfig.loadCodefromPref(context);
 
         textViewcode.setText(codebutoff);
 
@@ -57,6 +65,7 @@ public class CodeFragment extends Fragment  {
                 codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
                 textViewcode.setText(codebutoff);
                 listener.createDatabase();
+                reset = 1;
 
 
             }
@@ -65,14 +74,33 @@ public class CodeFragment extends Fragment  {
         linkbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.child(getString(R.string.app_name)).child(codebutoff).removeValue();
                 String edcode = linket.getText().toString();
-                PreferencesConfig.saveCodeinPref(getContext(),edcode);
-                codebutoff = PreferencesConfig.loadCodefromPref(getActivity());
+                reset = 0;
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists() && snapshot.child(context.getString(R.string.app_name)).hasChild(edcode.toString()) && (!edcode.equals(""))) {
+                            PreferencesConfig.saveCodeinPref(context,edcode);
+                            codebutoff = PreferencesConfig.loadCodefromPref(context);
+                            textViewcode.setText(codebutoff);
+                            close_keyboard();
+                            linked = 1;
+                        } else {
+                            if ( reset  == 0)
+                            Toast.makeText(getContext(),context.getString(R.string.insertcode) + edcode,Toast.LENGTH_SHORT).show();
+                            reset = 1;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                codebutoff = PreferencesConfig.loadCodefromPref(context);
                 textViewcode.setText(codebutoff);
-                close_keyboard();
-                linked = 1;
             }
+
         });
         return view;
     }
@@ -89,6 +117,7 @@ public class CodeFragment extends Fragment  {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
+            this.context = context;
             listener = (CodeFragment.onCodeInterface) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()

@@ -17,23 +17,4 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory app:title="@string/active_screen_str">
-
-
-        <SwitchPreferenceCompat
-            app:key="switch_screen"
-            app:title="@string/active_screen_switch_str"
-            android:lines="2"/>
-
-
-    </PreferenceCategory>
-
-
-    <PreferenceCategory app:title="@string/help_str">
-    <Preference
-        app:key="feedback"
-        app:title="Envie Feedback"
-        app:summary="Háganos saber de cualquier tipo de errores o nuevas ideas"/>
-    </PreferenceCategory>
-
 </PreferenceScreen>
