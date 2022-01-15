@@ -156,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 Intent intentsetting = new Intent(this, SettingsActivity.class);
                 startActivity(intentsetting);
+                String aux= PreferencesConfig.loadTotalfromPref(this);
+                mDatabase.child(getString(R.string.app_name)).child(codebutoff).child("Total").setValue(Integer.valueOf(aux));
 
                 break;
             case R.id.nav_compartir:
@@ -196,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public int getAforo() {
-        return Integer.valueOf(PreferencesConfig.loadTotalfromPref(getApplicationContext()));
+        return Integer.parseInt(PreferencesConfig.loadTotalfromPref(this));
+
     }
 
     @Override
