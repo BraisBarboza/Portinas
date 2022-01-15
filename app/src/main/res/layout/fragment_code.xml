@@ -9,13 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="19dp"
-        android:text="@string/code_title"
-        android:textSize="20dp"
-        android:justificationMode="inter_word"
-        android:gravity="center_horizontal"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"></TextView>
+        android:layout_marginTop="19dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal"
+        android:justificationMode="inter_word"
+        android:text="@string/code_title"
+        android:textSize="20dp"></TextView>
 
     <TextView
         android:id="@+id/code"
@@ -49,12 +49,12 @@
         android:layout_below="@+id/link_title"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="41dp"
         android:layout_marginEnd="25dp"
         android:layout_toStartOf="@+id/link_but"
         android:hint="@string/link_et"
-        android:maxLength="5"
-        android:inputType="number"></EditText>
+        android:inputType="number"
+        android:maxLength="5"></EditText>
 
     <Button
         android:id="@+id/link_but"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/link_title"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="41dp"
         android:layout_marginEnd="30dp"
         android:text="@string/link_but"></Button>
 
@@ -73,8 +73,8 @@
         android:layout_below="@+id/link_et"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="-20dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="-22dp"
         android:layout_marginRight="10dp"
         android:background="#D2DDDD"
         android:gravity="center_horizontal"
@@ -89,9 +89,9 @@
         android:layout_below="@+id/resetcode_tv"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="95dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="102dp"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="98dp"
         android:text="@string/resetcode_but">
 
     </Button>
