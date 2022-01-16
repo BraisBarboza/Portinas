@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory app:title="@string/contador_str">
+
+
+        <EditTextPreference
+            app:key="pref_saved_total"
+            android:inputType="number"
+            android:textStyle="bold"
+            app:title="@string/limite_str"
+            app:subtitle="@string/limite_sub"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

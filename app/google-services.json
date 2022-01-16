@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "335595674175",
+    "firebase_url": "https://portinas-0568-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "portinas-0568",
+    "storage_bucket": "portinas-0568.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335595674175:android:c6811cbc19c036e38bb68a",
+        "android_client_info": {
+          "package_name": "com.example.portinas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335595674175-k3u29cvldhvkbig0a2v8h5bc1sruelv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpbqLUNJfEzKBuzP2sZNFNasyWCfWJoR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335595674175-k3u29cvldhvkbig0a2v8h5bc1sruelv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

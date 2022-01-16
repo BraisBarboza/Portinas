@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.portinas">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Portinas">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity"/>
+        <activity
             android:name=".EnterAforoActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +35,11 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Portinas.NoActionBar">
-
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

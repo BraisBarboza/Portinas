@@ -2,6 +2,99 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#45D57F">
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/code_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal"
+        android:justificationMode="inter_word"
+        android:text="@string/code_title"
+        android:textSize="20dp"></TextView>
+
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/code_title"
+        android:layout_marginTop="18dp"
+        android:gravity="center_horizontal"
+        android:text="39393"
+        android:textSize="30dp"
+        android:textStyle="bold"></TextView>
+
+    <TextView
+        android:id="@+id/link_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/code"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_horizontal"
+        android:justificationMode="inter_word"
+        android:text="@string/link_title"
+        android:textSize="20dp"></TextView>
+
+
+    <EditText
+        android:id="@+id/link_et"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/link_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="25dp"
+        android:layout_toStartOf="@+id/link_but"
+        android:hint="@string/link_et"
+        android:inputType="number"
+        android:maxLength="5"></EditText>
+
+    <Button
+        android:id="@+id/link_but"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/link_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="41dp"
+        android:layout_marginEnd="30dp"
+        android:text="@string/link_but"></Button>
+
+    <TextView
+        android:id="@+id/resetcode_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/link_et"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="-22dp"
+        android:layout_marginRight="10dp"
+        android:background="#D2DDDD"
+        android:gravity="center_horizontal"
+        android:justificationMode="inter_word"
+        android:text="@string/resetcode_but"
+        android:textSize="25dp"></TextView>
+
+    <Button
+        android:id="@+id/resetcode_but"
+        android:layout_width="214dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resetcode_tv"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="98dp"
+        android:text="@string/resetcode_but">
+
+    </Button>
+
 
 </RelativeLayout>

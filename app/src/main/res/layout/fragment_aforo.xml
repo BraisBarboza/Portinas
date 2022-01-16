@@ -43,7 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="56dp"
             android:layout_marginTop="28dp"
+            android:layout_marginEnd="29dp"
             android:text="Eliminar"
+            app:layout_constraintEnd_toStartOf="@+id/button_increase"
             app:layout_constraintStart_toStartOf="@+id/progress_bar"
             app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
 
@@ -51,10 +53,12 @@
             android:id="@+id/button_increase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="68dp"
             android:text="Añadir"
             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+            app:layout_constraintStart_toEndOf="@+id/button_decrease"
             app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
