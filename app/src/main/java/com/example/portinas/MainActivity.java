@@ -398,8 +398,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void WriteModeOn() {
         writeMode = true;
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
             return;
         }
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, writingTagFilters, null);
@@ -407,8 +407,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void WriteModeOff() {
         writeMode = false;
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
         if (nfcAdapter == null) {
-            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
             return;
         }
         nfcAdapter.disableForegroundDispatch(this);
