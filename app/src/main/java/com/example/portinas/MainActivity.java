@@ -260,13 +260,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             Toast.makeText(this, getString(R.string.no_nfc_toast_text), Toast.LENGTH_LONG).show();
+        }else {
+            text = readFromIntent(getIntent());
+            IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+            tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
+            writingTagFilters = new IntentFilter[]{tagDetected};
+            return text;
         }
-        text = readFromIntent(getIntent());
-        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
-        writingTagFilters = new IntentFilter[]{tagDetected};
-        return text;
-
+        return "";
     }
 
     public String readFromIntent(Intent intent) {
@@ -397,14 +398,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void WriteModeOn() {
         writeMode = true;
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            return;
         }
         nfcAdapter.enableForegroundDispatch(this, pendingIntent, writingTagFilters, null);
     }
 
     private void WriteModeOff() {
         writeMode = false;
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (nfcAdapter == null) {
+            return;
+        }
         nfcAdapter.disableForegroundDispatch(this);
     }
 }

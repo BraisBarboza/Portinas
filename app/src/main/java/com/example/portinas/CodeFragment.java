@@ -4,6 +4,7 @@ import static com.example.portinas.MainActivity.mDatabase;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -95,6 +98,19 @@ public class CodeFragment extends Fragment  {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
+                mDatabase.child(getString(R.string.app_name)).child(edcode).child("Current").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        } else {
+
+                            mDatabase.child(getString(R.string.app_name)).child(edcode).child("Current").setValue(Integer.parseInt(String.valueOf(task.getResult().getValue()))+1);
+                            mDatabase.child(getString(R.string.app_name)).child(edcode).child("Current").setValue(Integer.parseInt(String.valueOf(task.getResult().getValue()))-1);
+
+                        }
                     }
                 });
                 codebutoff = PreferencesConfig.loadCodefromPref(context);
